@@ -1,10 +1,11 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import ApiMarvelService from '../services/ApiMarvelService'
+import CharasterDto from './Character'
 
 
 
@@ -35,16 +36,22 @@ createStyles({
 const MarvelComponent:  React.FC = () => {
     const classes = useStyles()
 
-    const [Actor, setActor] = useState([])
+    const [Actor, setActors] = useState<CharasterDto[]>([])
+    // const [Actor, setActors] = useState([[[]]])
 
     const getAllcharacters = () => {
-            ApiMarvelService.getPersonageMarvel().then((res) => {
-                
-            })
+            ApiMarvelService.getPersonageMarvel()
+            .then(res => {
+                setActors(res.data.data.results)
+                console.log(Actor)
+              })
     }
-    
+
+    useEffect(() => {
+        getAllcharacters()
+      })
     return(
-        <div className={classes.root}>
+      <div className={classes.root}>
         <Paper className={classes.paper}>
           <Grid container spacing={2}>
             <Grid item>
@@ -56,23 +63,14 @@ const MarvelComponent:  React.FC = () => {
               <Grid item xs container direction="column" spacing={2}>
                 <Grid item xs>
                   <Typography gutterBottom variant="subtitle1">
-                    Standard license
+                    Nom : 
                   </Typography>
                   <Typography variant="body2" gutterBottom>
-                    Full resolution 1920x1080 • JPEG
+                    Description : 
                   </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    ID: 1030114
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography variant="body2" style={{ cursor: 'pointer' }}>
-                    Remove
+                  <Typography variant="body2" color="textSecondary">  
                   </Typography>
                 </Grid>
-              </Grid>
-              <Grid item>
-                <Typography variant="subtitle1">$19.00</Typography>
               </Grid>
             </Grid>
           </Grid>
